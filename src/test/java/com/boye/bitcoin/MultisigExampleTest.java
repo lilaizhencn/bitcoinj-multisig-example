@@ -8,7 +8,6 @@ import static org.junit.Assert.assertNotNull;
 
 public class MultisigExampleTest {
     @Test public void testAppHasAGreeting() {
-        MultisigExample classUnderTest = new MultisigExample();
-        assertNotNull("app should have a greeting", classUnderTest.getGreeting());
+
     }
 }
