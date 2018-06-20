@@ -35,7 +35,7 @@ public class RedeemingTransaction {
         System.out.println("redemption value: "+value.toFriendlyString());
         Wallet wallet = appKit.wallet();
         Address finalAddress =  wallet.currentReceiveAddress();
-        redeemingMultisigTx1.addOutput(value, finalAddress);
+        redeemingMultisigTx1.addOutput(value.div(2), finalAddress);
         System.out.println("Send to final address: "+ finalAddress);
     }
 
@@ -53,7 +53,7 @@ public class RedeemingTransaction {
         Coin value = multisigOutput.getValue();
         Wallet wallet = appKit.wallet();
         Address finalAddress =  wallet.currentReceiveAddress();
-        redeemingMultisigTx2.addOutput(value,  finalAddress);
+        redeemingMultisigTx2.addOutput(value.div(2),  finalAddress);
         System.out.println("Send to final address: "+ finalAddress);
     }
 
@@ -75,6 +75,7 @@ public class RedeemingTransaction {
         });
         System.out.println("redeeming Tx id: " + redeemingMultisigTx2.getHashAsString());
         PeerGroup peerGroup = appKit.peerGroup();
+        System.out.println("Redeem Tx: " + redeemingMultisigTx2);
         peerGroup.broadcastTransaction(redeemingMultisigTx2).broadcast().get();
         System.out.println("Multisig redeeming transaction broadcasted!");
         Wallet wallet =  appKit.wallet();
