@@ -2,3 +2,5 @@
 .idea
 build
 out
+wallet.spvchain
+wallet.wallet
