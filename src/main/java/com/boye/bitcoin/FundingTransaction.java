@@ -5,6 +5,7 @@ import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptBuilder;
+import org.bitcoinj.script.ScriptPattern;
 import org.bitcoinj.wallet.SendRequest;
 import org.bitcoinj.wallet.Wallet;
 
@@ -38,7 +39,7 @@ public class FundingTransaction {
         wallet.importKeys(keys);
         //the below is redeem script
         payingToMultisigTxoutScript = ScriptBuilder.createMultiSigOutputScript(2, keys); //2 of 3 multisig
-        System.out.println("Is sent to multisig: " + payingToMultisigTxoutScript.isSentToMultiSig());
+        System.out.println("Is sent to multisig: " + ScriptPattern.isSentToMultisig(payingToMultisigTxoutScript));
         System.out.println("redeemScript: " + payingToMultisigTxoutScript);
 
     }

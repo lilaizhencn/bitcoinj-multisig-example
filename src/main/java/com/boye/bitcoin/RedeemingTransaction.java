@@ -6,6 +6,7 @@ import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.TestNet3Params;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptBuilder;
+import org.bitcoinj.script.ScriptPattern;
 import org.bitcoinj.wallet.Wallet;
 
 import java.io.File;
@@ -43,7 +44,7 @@ public class RedeemingTransaction {
 
     private void createRawTransactionForMultisigRedeemingByA() {
         redeemingMultisigTx1 = new Transaction(params);
-        multisigOutput = wallet.getUnspents().get(0).getParentTransaction().getOutputs().stream().filter(unspent -> unspent.getScriptPubKey().isSentToMultiSig()).findFirst().get();
+        multisigOutput = wallet.getUnspents().get(0).getParentTransaction().getOutputs().stream().filter(unspent -> ScriptPattern.isSentToMultisig(unspent.getScriptPubKey())).findFirst().get();
         System.out.println("multisigOutput: " + multisigOutput);
         redeemingMultisigTx1.addInput(multisigOutput);
         Coin value = multisigOutput.getValue();
@@ -56,7 +57,7 @@ public class RedeemingTransaction {
     private void signRawTransactionForMultisigRedeemingByA() {
         Script payingToMultisigTxoutScriptPubKey = multisigOutput.getScriptPubKey();
         System.out.println("payingToMultisigTxoutScriptPubKey: " + payingToMultisigTxoutScriptPubKey);
-        checkState(payingToMultisigTxoutScriptPubKey.isSentToMultiSig());
+        checkState(ScriptPattern.isSentToMultisig(payingToMultisigTxoutScriptPubKey));
         Sha256Hash sighash = redeemingMultisigTx1.hashForSignature(0, payingToMultisigTxoutScriptPubKey, Transaction.SigHash.ALL, false);
         partyASignature = wallet.getImportedKeys().get(0).sign(sighash);
     }
@@ -71,7 +72,7 @@ public class RedeemingTransaction {
         System.out.println("Send to final address: " + finalAddress);
     }
 
-    private void signRawTransactionForMultisigRedeemingByB()  {
+    private void signRawTransactionForMultisigRedeemingByB() {
         Script payingToMultisigTxoutScriptPubKey = multisigOutput.getScriptPubKey();
         Sha256Hash sighash = redeemingMultisigTx2.hashForSignature(0, payingToMultisigTxoutScriptPubKey, Transaction.SigHash.ALL, false);
         partyBSignature = wallet.getImportedKeys().get(1).sign(sighash);
